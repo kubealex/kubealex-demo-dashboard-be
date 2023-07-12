@@ -21,7 +21,7 @@ public interface AAPControllerService {
     String controllerPassword = ConfigProvider.getConfig().getValue("controller.password", String.class);
 
     @GET
-    @Path("/job_templates")
+    @Path("/job_templates/")
     @ClientHeaderParam(name = "Authorization", value = "{genBasicAuth}")
     public Response getJobTemplates();
 

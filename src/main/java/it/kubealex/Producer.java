@@ -78,12 +78,12 @@ public class Producer {
     @Produces(MediaType.APPLICATION_JSON)
     public List<JobTemplate> getJobTemplates() throws JsonMappingException, JsonProcessingException {
         Response response = aapControllerService.getJobTemplates();
-        String json = response.readEntity(String.class);
+        // String json = response.readEntity(String.class);
 
-        JsonReader reader = Json.createReader(new StringReader(json));
-        JsonObject jsonObject = reader.readObject();
-        JsonArray resultsArray = jsonObject.getJsonArray("results");
-
+        // JsonReader reader = Json.createReader(new StringReader(json));
+        // JsonObject jsonObject = reader.readObject();
+        // JsonArray resultsArray = jsonObject.getJsonArray("results");
+        JsonArray resultsArray = response.readEntity(JsonObject.class).getJsonArray("results");
         ObjectMapper objectMapper = new ObjectMapper();
         List<JobTemplate> jobTemplates = objectMapper.readValue(resultsArray.toString(),
                 new TypeReference<List<JobTemplate>>() {
