@@ -2,8 +2,11 @@ package it.kubealex.ansible.controller.service;
 
 import java.util.Base64;
 
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.eclipse.microprofile.config.ConfigProvider;
@@ -31,6 +34,12 @@ public interface AAPControllerService {
     }
 
     @GET
+    @Path("/job_templates/{id}/launch/")
+    @ClientHeaderParam(name = "Authorization", value = "{genBasicAuth}")
+    public Response launchTemplateInfo(@RestPath Integer id);
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/job_templates/{id}/launch/")
     @ClientHeaderParam(name = "Authorization", value = "{genBasicAuth}")
     public Response launchTemplate(@RestPath Integer id);

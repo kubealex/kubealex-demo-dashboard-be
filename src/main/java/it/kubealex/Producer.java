@@ -9,6 +9,7 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -78,14 +79,8 @@ public class Producer {
     @Produces(MediaType.APPLICATION_JSON)
     public List<JobTemplate> getJobTemplates() throws JsonMappingException, JsonProcessingException {
         Response response = aapControllerService.getJobTemplates();
-        // String json = response.readEntity(String.class);
-
-        // JsonReader reader = Json.createReader(new StringReader(json));
-        // JsonObject jsonObject = reader.readObject();
-        // JsonArray resultsArray = jsonObject.getJsonArray("results");
         JsonArray resultsArray = response.readEntity(JsonObject.class).getJsonArray("results");
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<JobTemplate> jobTemplates = objectMapper.readValue(resultsArray.toString(),
+        List<JobTemplate> jobTemplates = new ObjectMapper().readValue(resultsArray.toString(),
                 new TypeReference<List<JobTemplate>>() {
                 });
 
@@ -93,6 +88,14 @@ public class Producer {
     }
 
     @GET
+    @Path("/ansible/launch/{id}")
+    public JsonObject launchTemplateInfo(@RestPath Integer id) {
+        Response response = aapControllerService.launchTemplateInfo(id);
+        JsonObject json = response.readEntity(JsonObject.class);
+        return json;
+    }
+
+    @POST
     @Path("/ansible/launch/{id}")
     public String launchTemplate(@RestPath Integer id) {
         Response response = aapControllerService.launchTemplate(id);

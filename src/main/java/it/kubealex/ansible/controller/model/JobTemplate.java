@@ -13,26 +13,15 @@ public class JobTemplate {
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("last_job_failed")
-    private Boolean lastRunFailed;
+    @JsonProperty("status")
+    private String templateStatus;
 
-    @JsonProperty("last_job_run")
-    private String lastRunTimestamp;
-
-    public Boolean getLastRunFailed() {
-        return lastRunFailed;
+    public String getTemplateStatus() {
+        return templateStatus;
     }
 
-    public void setLastRunFailed(Boolean lastRunFailed) {
-        this.lastRunFailed = lastRunFailed;
-    }
-
-    public String getLastRunTimestamp() {
-        return lastRunTimestamp;
-    }
-
-    public void setLastRunTimestamp(String lastRunTimestamp) {
-        this.lastRunTimestamp = lastRunTimestamp;
+    public void setTemplateStatus(String templateStatus) {
+        this.templateStatus = templateStatus;
     }
 
     public String getId() {
