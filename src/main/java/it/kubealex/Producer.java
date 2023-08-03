@@ -1,13 +1,10 @@
 package it.kubealex;
 
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
