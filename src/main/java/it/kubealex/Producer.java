@@ -71,16 +71,50 @@ public class Producer {
         return alertList;
     }
 
+    /*
+     * @GET
+     *
+     * @Path("/ansible/")
+     *
+     * @Produces(MediaType.APPLICATION_JSON)
+     * public List<JobTemplate> getJobTemplates() throws JsonMappingException,
+     * JsonProcessingException {
+     * Response response = aapControllerService.getJobTemplates(1);
+     * JsonArray resultsArray =
+     * response.readEntity(JsonObject.class).getJsonArray("results");
+     * List<JobTemplate> jobTemplates = new
+     * ObjectMapper().readValue(resultsArray.toString(),
+     * new TypeReference<List<JobTemplate>>() {
+     * });
+     *
+     * return jobTemplates;
+     * }
+     */
+
     @GET
     @Path("/ansible/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<JobTemplate> getJobTemplates() throws JsonMappingException, JsonProcessingException {
-        Response response = aapControllerService.getJobTemplates();
-        JsonArray resultsArray = response.readEntity(JsonObject.class).getJsonArray("results");
-        List<JobTemplate> jobTemplates = new ObjectMapper().readValue(resultsArray.toString(),
-                new TypeReference<List<JobTemplate>>() {
-                });
+    public List<JobTemplate> getJobTemplates() throws JsonMappingException,
+            JsonProcessingException {
+        return fetchAllPages(aapControllerService);
+    }
 
+    private List<JobTemplate> fetchAllPages(AAPControllerService service)
+            throws JsonMappingException, JsonProcessingException {
+        List<JobTemplate> jobTemplates = new ArrayList<>();
+        Boolean hasNextPage = true;
+        Integer page = 1;
+        while (hasNextPage) {
+            Response response = service.getJobTemplates(page);
+            JsonObject responseObject = response.readEntity(JsonObject.class);
+            JsonArray resultsArray = responseObject.getJsonArray("results");
+            List<JobTemplate> pageResults = new ObjectMapper().readValue(resultsArray.toString(),
+                    new TypeReference<List<JobTemplate>>() {
+                    });
+            jobTemplates.addAll(pageResults);
+            hasNextPage = responseObject.isNull("next") ? false : true;
+            page++;
+        }
         return jobTemplates;
     }
 
