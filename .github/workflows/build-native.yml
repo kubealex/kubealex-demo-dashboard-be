@@ -14,7 +14,7 @@ jobs:
   build:
     name: Build Quarkus application and push image
     env:
-      working-directory: ./
+      working-directory: .
     defaults:
       run:
         working-directory: ${{ env.working-directory }}
@@ -40,7 +40,7 @@ jobs:
         id: build-image
         uses: redhat-actions/buildah-build@v2
         with:
-          image: kubealex-dashboard-be
+          image: quay.io/kubealex/kubealex-dashboard-be
           tags: latest
           containerfiles: |
             ${{ env.working-directory }}/src/main/docker/Dockerfile.native-micro
