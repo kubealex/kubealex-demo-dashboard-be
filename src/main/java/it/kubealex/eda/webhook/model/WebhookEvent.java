@@ -1,6 +1,6 @@
 package it.kubealex.eda.webhook.model;
 
-import it.kubealex.eda.kafka.model.Event;
+import it.kubealex.eda.event.model.Event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

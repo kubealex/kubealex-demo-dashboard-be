@@ -3,6 +3,7 @@ package it.kubealex;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.inject.Inject;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.ws.rs.GET;
@@ -16,11 +17,14 @@ import it.kubealex.ansible.controller.model.JobTemplate;
 import it.kubealex.ansible.controller.service.AAPControllerService;
 import it.kubealex.eda.alertmanager.model.Alert;
 import it.kubealex.eda.alertmanager.service.AlertService;
-import it.kubealex.eda.kafka.model.Event;
+import it.kubealex.eda.event.model.Event;
+import it.kubealex.eda.kafka.service.KafkaEventSender;
+import it.kubealex.eda.mqtt.service.MqttEventSender;
 import it.kubealex.eda.webhook.model.WebhookEvent;
 import it.kubealex.eda.webhook.service.WebhookService;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.reactive.RestPath;
 
@@ -28,6 +32,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.smallrye.reactive.messaging.annotations.Broadcast;
 
 @Path("/")
 public class Producer {
@@ -39,16 +45,25 @@ public class Producer {
     @RestClient
     AAPControllerService aapControllerService;
 
-    @Channel("eda-topic")
-    Emitter<Event> quoteRequestEmitter;
+    @Inject
+    KafkaEventSender kafkaEventSender;
+
+    @Inject
+    MqttEventSender mqttEventSender;
 
     @GET
     @Path("/kafka/")
     @Produces(MediaType.APPLICATION_JSON)
+
     public Event sendKafkaEvent() {
-        Event testEvent = new Event("greeting", "Hello from Quarkus");
-        quoteRequestEmitter.send(testEvent);
-        return testEvent;
+        return kafkaEventSender.sendKafkaEvent();
+    }
+
+    @GET
+    @Path("/mqtt/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Event sendMqttEvent() {
+        return mqttEventSender.sendMqttEvent();
     }
 
     @GET
