@@ -10,6 +10,8 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 public class WebhookEvent extends Event {
     @JsonProperty("target_hosts")
     public String eventTargetHosts;
+    @JsonProperty("message")
+    public String eventMessage;
 
     public WebhookEvent() {
     }
