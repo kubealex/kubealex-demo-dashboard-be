@@ -6,7 +6,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
 public class Event {
-    @JsonProperty("name")
+    @JsonProperty("eventName")
     public String eventName;
 
     public Event() {
